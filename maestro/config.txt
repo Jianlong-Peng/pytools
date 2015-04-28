@@ -1,0 +1,17 @@
+#receptor information. Only one item allowed
+receptor_file: E:\data\virus\maestro\prepwizard_workdir\prepwizard-impref_ref.mae
+receptor_leaving_atom: 2548
+receptor_staying_atom: 1150
+
+#ligand information
+#1. it supports multiply ligands in a single `ligand_file`
+#2. only one SMARTS string is allowed!
+#3. 1st atom of the SMARTS will be bound to the receptor `receptor_staying_atom`
+#4. all possible atoms will be searched, and each leads to a complex
+#5. all complexes will be saved in one file `complex_out`
+ligand_file: E:\data\virus\maestro\ligprep_AG7088-out.maegz
+smarts: C=CC=O
+complex_out: E:\data\virus\maestro\complex.maegz
+
+#more ligands can be put here
+#at least one space line should be put between each ligand
