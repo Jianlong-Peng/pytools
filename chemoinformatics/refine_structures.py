@@ -6,12 +6,13 @@
 #        Email: jlpeng1201@gmail.com
 #     HomePage: 
 #      Created: 2015-04-30 14:10:55
-#   LastChange: 2015-04-30 16:47:29
+#   LastChange: 2015-04-30 19:10:57
 #      History:
 #=============================================================================
 '''
 import sys
 from getopt import getopt
+from Queue import Queue
 from rdkit import Chem
 from rdkit.Chem import AllChem
 from rdkit.Chem.SaltRemover import SaltRemover
@@ -119,6 +120,12 @@ Attention
                 continue
         if strip:
             m = remover.StripMol(m)
+            if m.HasProp("_Name"):
+                name = m.GetProp("_Name")
+            else:
+                name = "%s_%d"%(infile,count)
+            if num_components(m) > 1:
+                print "Warning: %s still has more than one components!"%name
         if addh:
             m = AllChem.AddHs(m)
         if make3d:
@@ -126,6 +133,28 @@ Attention
             AllChem.UFFOptimizeMolecule(m)
         outf.write(m)
     outf.close()
+
+
+def num_components(m):
+    checked = [False for _ in m.GetAtoms()]
+    components = []
+    while False in checked:
+        i = checked.index(False)
+        candidate = Queue()
+        candidate.put(i)
+        checked[i] = True
+        temp = []
+        while not candidate.empty():
+            i = candidate.get()
+            temp.append(i)
+            for nbor in m.GetAtomWithIdx(i).GetNeighbors():
+                j = nbor.GetIdx()
+                if not checked[j]:
+                    candidate.put(j)
+                    checked[j] = True
+        components.append(temp)
+    return len(components)
+
 
 main()
 
