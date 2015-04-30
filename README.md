@@ -9,3 +9,6 @@ some python scripts used in my projects
 
 ./PMF:
     for potential mean forece
+
+./chemoinformatics
+
